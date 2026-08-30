@@ -16849,13 +16849,13 @@ ${text}`;
       const canvas = document.getElementById('export-canvas');
       const ctx = canvas.getContext('2d');
 
-      // 1600x1200 high-res layout
+      // 1600x1260 high-res layout
       canvas.width = 1600;
-      canvas.height = 1200;
+      canvas.height = 1260;
 
       // Background
       ctx.fillStyle = '#070B14';
-      ctx.fillRect(0, 0, 1600, 1200);
+      ctx.fillRect(0, 0, 1600, 1260);
 
       // Top Banner
       const grad = ctx.createLinearGradient(0, 0, 1600, 0);
@@ -16863,69 +16863,81 @@ ${text}`;
       grad.addColorStop(0.5, '#7C183E');
       grad.addColorStop(1, '#171026');
       ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, 1600, 110);
+      ctx.fillRect(0, 0, 1600, 105);
 
       // Banner Text
       ctx.fillStyle = '#D97706';
-      ctx.font = 'bold 16px Inter, sans-serif';
-      ctx.fillText('TEXAS SOUTHERN UNIVERSITY • GEOG 331: GEOGRAPHY OF TEXAS', 50, 38);
+      ctx.font = 'bold 15px Inter, sans-serif';
+      ctx.fillText('TEXAS SOUTHERN UNIVERSITY • GEOG 331: GEOGRAPHY OF TEXAS', 50, 34);
 
       ctx.fillStyle = '#FFFFFF';
-      ctx.font = 'bold 28px Inter, sans-serif';
-      ctx.fillText('Demographics, Diversity & Population Pyramids Laboratory', 50, 74);
+      ctx.font = 'bold 26px Inter, sans-serif';
+      ctx.fillText('Demographics, Diversity & Population Pyramids Laboratory', 50, 68);
 
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-      ctx.font = '16px Inter, sans-serif';
-      ctx.fillText(`Student: ${studentName}   |   Date: ${new Date().toLocaleDateString()}   |   Source: US Census Bureau ACS 5-Year Data`, 50, 98);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+      ctx.font = '15px Inter, sans-serif';
+      ctx.fillText(`Student: ${studentName}   |   Date: ${new Date().toLocaleDateString()}   |   Comparison: ${a.name} County vs ${b.name} County   |   US Census Bureau ACS 5-Year Data`, 50, 92);
 
-      // Main Card 1: Dual Pyramids Box
+      // Main Card 1: Spatial Map & Dual Pyramids Box
       ctx.fillStyle = '#0F172A';
       ctx.strokeStyle = '#1E293B';
       ctx.lineWidth = 2;
-      roundRect(ctx, 50, 140, 1500, 480, 12, true, true);
+      roundRect(ctx, 40, 125, 1520, 485, 12, true, true);
 
-      // Pyramid A Header
+      // Section 1 Header Titles
+      // Left: Map Title
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 18px Inter, sans-serif';
+      ctx.fillText('1. Geographic Location & Regional Setting', 65, 158);
+      ctx.fillStyle = '#94A3B8';
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText('254 Texas Counties • Spatial Baseline', 65, 178);
+
+      // Center: Pyramid A Header
       ctx.fillStyle = '#F43F5E';
-      ctx.font = 'bold 20px Inter, sans-serif';
-      ctx.fillText(`${a.name} County (Primary)`, 80, 180);
+      ctx.font = 'bold 18px Inter, sans-serif';
+      ctx.fillText(`${a.name} County (Primary)`, 520, 158);
       ctx.fillStyle = '#94A3B8';
-      ctx.font = '14px Inter, sans-serif';
-      ctx.fillText(`FIPS: 48${a.county_code} • Total Pop: ${a.total_pop.toLocaleString()} • Median Age: ${a.median_age} yrs`, 80, 204);
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText(`FIPS: 48${a.county_code} • Pop: ${a.total_pop.toLocaleString()} • Med Age: ${a.median_age} yrs`, 520, 178);
 
-      // Pyramid B Header
+      // Right: Pyramid B Header
       ctx.fillStyle = '#0EA5E9';
-      ctx.font = 'bold 20px Inter, sans-serif';
-      ctx.fillText(`${b.name} County (Comparison)`, 830, 180);
+      ctx.font = 'bold 18px Inter, sans-serif';
+      ctx.fillText(`${b.name} County (Comparison)`, 1030, 158);
       ctx.fillStyle = '#94A3B8';
-      ctx.font = '14px Inter, sans-serif';
-      ctx.fillText(`FIPS: 48${b.county_code} • Total Pop: ${b.total_pop.toLocaleString()} • Median Age: ${b.median_age} yrs`, 830, 204);
+      ctx.font = '12px Inter, sans-serif';
+      ctx.fillText(`FIPS: 48${b.county_code} • Pop: ${b.total_pop.toLocaleString()} • Med Age: ${b.median_age} yrs`, 1030, 178);
+
+      // Draw Texas Map directly to Canvas
+      drawCanvasTexasMap(ctx, a, b, 65, 195, 430, 395);
 
       // Draw Pyramids directly to Canvas
-      drawCanvasPyramid(ctx, a, 80, 220, 680, 370, '#FB7185', '#E11D48');
-      drawCanvasPyramid(ctx, b, 830, 220, 680, 370, '#38BDF8', '#0284C7');
+      drawCanvasPyramid(ctx, a, 515, 195, 485, 395, '#FB7185', '#E11D48');
+      drawCanvasPyramid(ctx, b, 1025, 195, 485, 395, '#38BDF8', '#0284C7');
 
       // Main Card 2: Diversity & Comparison Table
-      roundRect(ctx, 50, 645, 1500, 500, 12, true, true);
+      roundRect(ctx, 40, 630, 1520, 580, 12, true, true);
 
       // Section Title
       ctx.fillStyle = '#FFFFFF';
-      ctx.font = 'bold 20px Inter, sans-serif';
-      ctx.fillText('Racial / Ethnic Diversity & Demographic Indicators Comparison', 80, 685);
+      ctx.font = 'bold 18px Inter, sans-serif';
+      ctx.fillText('2. Racial / Ethnic Diversity Mosaic & Demographic Indicators Comparison', 65, 665);
 
       // Draw Stacked Diversity Bars
-      drawCanvasDiversityBar(ctx, a, 80, 715, 680, 24, '#F43F5E');
-      drawCanvasDiversityBar(ctx, b, 830, 715, 680, 24, '#0EA5E9');
+      drawCanvasDiversityBar(ctx, a, 65, 695, 690, 22, '#F43F5E');
+      drawCanvasDiversityBar(ctx, b, 825, 695, 690, 22, '#0EA5E9');
 
       // Diversity Legend
-      drawCanvasDiversityLegend(ctx, 80, 765);
+      drawCanvasDiversityLegend(ctx, 65, 745);
 
       // Draw Quantitative Summary Table
-      drawCanvasSummaryTable(ctx, a, b, 80, 800, 1440, 310);
+      drawCanvasSummaryTable(ctx, a, b, 65, 775, 1470, 410);
 
       // Footer
       ctx.fillStyle = '#64748B';
       ctx.font = '13px Inter, sans-serif';
-      ctx.fillText('Generated via Texas Demographics & Population Pyramids Explorer • Dr. Moulay Anwar Sounny-Slitine • Texas Southern University', 50, 1175);
+      ctx.fillText('Generated via Texas Demographics & Population Pyramids Explorer • Dr. Moulay Anwar Sounny-Slitine • Texas Southern University', 50, 1240);
 
       // Download Trigger
       const link = document.createElement('a');
@@ -16953,16 +16965,146 @@ ${text}`;
       if (stroke) ctx.stroke();
     }
 
+    // High Precision Mathematical Texas Map Renderer on HTML5 Canvas
+    function drawCanvasTexasMap(ctx, a, b, mapX, mapY, mapW, mapH) {
+      const minLng = -106.85;
+      const maxLng = -93.3;
+      const minLat = 25.6;
+      const maxLat = 36.7;
+
+      const cosLat = Math.cos(31.5 * Math.PI / 180);
+      const spanX = (maxLng - minLng) * cosLat;
+      const spanY = maxLat - minLat;
+
+      const scale = Math.min(mapW / spanX, mapH / spanY);
+      const offsetX = mapX + (mapW - (spanX * scale)) / 2;
+      const offsetY = mapY + (mapH - (spanY * scale)) / 2;
+
+      function proj(lng, lat) {
+        return {
+          x: offsetX + ((lng - minLng) * cosLat * scale),
+          y: offsetY + ((maxLat - lat) * scale)
+        };
+      }
+
+      // Map Background Box
+      ctx.fillStyle = '#070B14';
+      ctx.fillRect(mapX, mapY, mapW, mapH);
+      ctx.strokeStyle = '#1E293B';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(mapX, mapY, mapW, mapH);
+
+      // Draw all 254 Texas Counties
+      TX_GEOJSON.features.forEach(feat => {
+        const code = feat.properties.COUNTY;
+        const isA = (code === a.county_code);
+        const isB = (code === b.county_code);
+
+        let fillColor = '#141E33';
+        let strokeColor = '#2A3B53';
+        let lineWidth = 0.5;
+
+        if (isA) {
+          fillColor = '#F43F5E';
+          strokeColor = '#FFFFFF';
+          lineWidth = 2.5;
+        } else if (isB) {
+          fillColor = '#0EA5E9';
+          strokeColor = '#FFFFFF';
+          lineWidth = 2.5;
+        }
+
+        const geom = feat.geometry;
+        let rings = [];
+        if (geom.type === 'Polygon') {
+          rings = geom.coordinates;
+        } else if (geom.type === 'MultiPolygon') {
+          geom.coordinates.forEach(poly => rings.push(...poly));
+        }
+
+        rings.forEach(ring => {
+          ctx.beginPath();
+          ring.forEach((pt, idx) => {
+            const p = proj(pt[0], pt[1]);
+            if (idx === 0) ctx.moveTo(p.x, p.y);
+            else ctx.lineTo(p.x, p.y);
+          });
+          ctx.closePath();
+          ctx.fillStyle = fillColor;
+          ctx.fill();
+          ctx.strokeStyle = strokeColor;
+          ctx.lineWidth = lineWidth;
+          ctx.stroke();
+        });
+      });
+
+      // Draw Texas Urban Triangle
+      ctx.strokeStyle = '#D97706';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      TRIANGLE_COORDS.forEach((coord, idx) => {
+        const p = proj(coord[1], coord[0]);
+        if (idx === 0) ctx.moveTo(p.x, p.y);
+        else ctx.lineTo(p.x, p.y);
+      });
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Draw Anchor Cities
+      ANCHOR_CITIES.forEach(city => {
+        const p = proj(city.lng, city.lat);
+        ctx.fillStyle = '#CBD5E1';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = 'rgba(203, 213, 225, 0.75)';
+        ctx.font = '8px Inter, sans-serif';
+        ctx.fillText(city.name, p.x + 4, p.y + 2.5);
+      });
+
+      // Map Inset Legend
+      ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+      ctx.fillRect(mapX + 8, mapY + mapH - 32, mapW - 16, 24);
+      ctx.strokeStyle = '#1E293B';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(mapX + 8, mapY + mapH - 32, mapW - 16, 24);
+
+      // Legend items
+      ctx.fillStyle = '#F43F5E';
+      ctx.fillRect(mapX + 16, mapY + mapH - 24, 9, 9);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.font = 'bold 9px Inter, sans-serif';
+      ctx.fillText(`${a.name} (A)`, mapX + 28, mapY + mapH - 16);
+
+      ctx.fillStyle = '#0EA5E9';
+      ctx.fillRect(mapX + 140, mapY + mapH - 24, 9, 9);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(`${b.name} (B)`, mapX + 152, mapY + mapH - 16);
+
+      ctx.strokeStyle = '#D97706';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([3, 3]);
+      ctx.beginPath();
+      ctx.moveTo(mapX + 265, mapY + mapH - 20);
+      ctx.lineTo(mapX + 285, mapY + mapH - 20);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = '#D97706';
+      ctx.fillText('Urban Triangle', mapX + 290, mapY + mapH - 16);
+    }
+
     function drawCanvasPyramid(ctx, data, x, y, width, height, maleColor, femaleColor) {
       const total = data.total_pop || 1;
-      const centerCol = 44;
+      const centerCol = 40;
       const halfW = (width - centerCol) / 2;
       const cX = x + halfW;
       const rowH = height / 18;
       const maxPct = 8.0;
 
-      // Axis Line
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+      // Axis Lines
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(cX, y); ctx.lineTo(cX, y + height);
@@ -16981,17 +17123,17 @@ ${text}`;
         const fW = Math.min(halfW, (fPct / maxPct) * halfW);
         const rowY = y + (i * rowH);
 
-        // Male Bar
+        // Male Bar (Left)
         ctx.fillStyle = maleColor;
         ctx.fillRect(cX - mW, rowY + 1, mW, rowH - 3);
 
-        // Female Bar
+        // Female Bar (Right)
         ctx.fillStyle = femaleColor;
         ctx.fillRect(cX + centerCol, rowY + 1, fW, rowH - 3);
 
         // Label
         ctx.fillStyle = '#CBD5E1';
-        ctx.font = '10px JetBrains Mono, monospace';
+        ctx.font = '9px JetBrains Mono, monospace';
         ctx.textAlign = 'center';
         ctx.fillText(label, cX + (centerCol / 2), rowY + rowH - 4);
       }
@@ -17001,7 +17143,7 @@ ${text}`;
     function drawCanvasDiversityBar(ctx, data, x, y, width, height, labelColor) {
       const tot = data.total_pop || 1;
       ctx.fillStyle = '#FFFFFF';
-      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.font = 'bold 12px Inter, sans-serif';
       ctx.fillText(`${data.name} County Diversity Breakdown`, x, y - 6);
 
       const simp = calculateSimpsonDiversity(data).toFixed(2);
@@ -17039,16 +17181,16 @@ ${text}`;
       let curX = x;
       items.forEach(it => {
         ctx.fillStyle = it.color;
-        ctx.fillRect(curX, y, 12, 12);
+        ctx.fillRect(curX, y, 10, 10);
         ctx.fillStyle = '#CBD5E1';
-        ctx.font = '12px Inter, sans-serif';
-        ctx.fillText(it.label, curX + 18, y + 10);
-        curX += 160;
+        ctx.font = '11px Inter, sans-serif';
+        ctx.fillText(it.label, curX + 15, y + 9);
+        curX += 150;
       });
     }
 
     function drawCanvasSummaryTable(ctx, a, b, x, y, width, height) {
-      const headers = ['Demographic Metric', `${a.name} County`, `${b.name} County`, 'Geographic Synthesis Note'];
+      const headers = ['Demographic Metric', `${a.name} County (Primary)`, `${b.name} County (Comparison)`, 'Geographic Synthesis Note'];
       const rows = [
         ['Total Population', a.total_pop.toLocaleString(), b.total_pop.toLocaleString(), a.total_pop > b.total_pop ? `${(a.total_pop/Math.max(1,b.total_pop)).toFixed(0)}x larger` : 'Comparable'],
         ['Median Age (Total)', `${a.median_age} yrs`, `${b.median_age} yrs`, `Δ ${(a.median_age - b.median_age).toFixed(1)} yrs`],
@@ -17059,14 +17201,14 @@ ${text}`;
         ['Sex Ratio (Males / 100 Females)', ((a.male_pop/(a.female_pop||1))*100).toFixed(1), ((b.male_pop/(b.female_pop||1))*100).toFixed(1), parseFloat((b.male_pop/(b.female_pop||1))*100) > 110 ? 'Male skewed (Oil extraction / Ag)' : 'Balanced']
       ];
 
-      const colW = [320, 240, 240, 640];
+      const colW = [300, 230, 230, 710];
       const rowH = 34;
 
       // Header Row
       ctx.fillStyle = '#1E293B';
       ctx.fillRect(x, y, width, rowH);
       ctx.fillStyle = '#FDE68A';
-      ctx.font = 'bold 13px Inter, sans-serif';
+      ctx.font = 'bold 12px Inter, sans-serif';
       
       let curX = x;
       headers.forEach((h, idx) => {
@@ -17083,7 +17225,7 @@ ${text}`;
         curX = x;
         r.forEach((cell, cIdx) => {
           ctx.fillStyle = (cIdx === 1) ? '#F43F5E' : (cIdx === 2) ? '#38BDF8' : '#CBD5E1';
-          ctx.font = (cIdx === 1 || cIdx === 2) ? 'bold 12px JetBrains Mono, monospace' : '12px Inter, sans-serif';
+          ctx.font = (cIdx === 1 || cIdx === 2) ? 'bold 11px JetBrains Mono, monospace' : '11px Inter, sans-serif';
           ctx.fillText(cell, curX + 12, rowY + 22);
           curX += colW[cIdx];
         });
