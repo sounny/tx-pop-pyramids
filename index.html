@@ -779,9 +779,10 @@
         <div class="form-group">
           <label class="form-label">Basemap Style</label>
           <select id="basemap-select" class="form-select" onchange="changeBasemap(this.value)">
-            <option value="dark">CartoDB Dark Matter (Recommended)</option>
-            <option value="light">CartoDB Positron (Light)</option>
+            <option value="dark">ESRI Dark Gray Canvas (Recommended)</option>
+            <option value="light">ESRI Light Gray Canvas</option>
             <option value="satellite">ESRI World Satellite</option>
+            <option value="topo">ESRI Topographic Map</option>
             <option value="osm">OpenStreetMap</option>
           </select>
         </div>
@@ -16092,11 +16093,8 @@
 
       L.control.zoom({ position: 'topright' }).addTo(map);
 
-      // CartoDB Dark Matter base
-      baseLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-        maxZoom: 19,
-        subdomains: 'abcd'
-      }).addTo(map);
+      // Base Tile Layer (100% Free, Zero API Key Required, No Watermark)
+      baseLayer = createBasemap('dark').addTo(map);
 
       // GeoJSON County Boundaries Layer
       geojsonLayer = L.geoJSON(TX_GEOJSON, {
@@ -16134,19 +16132,47 @@
       citiesLayer.addTo(map);
     }
 
+    // Basemap Factory (Zero API Key, 100% Free ESRI & OSM)
+    function createBasemap(type) {
+      if (type === 'dark') {
+        const base = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 16, crossOrigin: true
+        });
+        const ref = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 16, crossOrigin: true
+        });
+        return L.layerGroup([base, ref]);
+      } else if (type === 'light') {
+        const base = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 16, crossOrigin: true
+        });
+        const ref = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 16, crossOrigin: true
+        });
+        return L.layerGroup([base, ref]);
+      } else if (type === 'satellite') {
+        const base = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 18, crossOrigin: true
+        });
+        const ref = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 18, crossOrigin: true
+        });
+        return L.layerGroup([base, ref]);
+      } else if (type === 'topo') {
+        return L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+          maxZoom: 18, crossOrigin: true
+        });
+      } else {
+        return L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19, crossOrigin: true
+        });
+      }
+    }
+
     // Basemap switch
     function changeBasemap(type) {
-      map.removeLayer(baseLayer);
-      if (type === 'dark') {
-        baseLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd' });
-      } else if (type === 'light') {
-        baseLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19, subdomains: 'abcd' });
-      } else if (type === 'satellite') {
-        baseLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 18 });
-      } else {
-        baseLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
-      }
-      baseLayer.addTo(map);
+      if (baseLayer) map.removeLayer(baseLayer);
+      baseLayer = createBasemap(type).addTo(map);
     }
 
     function toggleCitiesLayer(show) {
